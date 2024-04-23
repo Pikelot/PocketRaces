@@ -1,32 +1,28 @@
 import os,time
+from misc import *
+from classes import character
+from sistema_combate import batalha
+from personagens import goblin
 
 run = True
 menu = True
 play = False
 rules = False
 key = False
-
-HP = 50
-ATK = 3
-pot = 1
-elix = 0
-gold = 0
-x = 0
-y = 0
+battle = False
 
 #mapa = 
 
 def salvar():
     status = [
-        nome,
-        str(HP),
-        str(ATK),
-        str(pot),
-        str(elix),
-        str(gold),
-        str(x),
-        str(y),
-        str(key)
+        str(heroi.nome),
+        str(heroi.dano),
+        str(heroi.vida),
+        #str(elix),
+        #str(gold),
+        #str(x),
+        #str(y),
+        #str(key)
     ]
 
     file = open("load.txt", "w")
@@ -35,12 +31,6 @@ def salvar():
         file.write(items + '\n')
     
     file.close()
-
-def limpar():
-    os.system("cls")
-
-def desenho():
-    print('%*------------------------------*%')
 
 while run:
     while menu:
@@ -76,7 +66,16 @@ while run:
             
             limpar()
 
+            #elix = 0
+            #gold = 0
+            #pot = 0
+            #x = 0
+            #y = 0
+            #key = 0
+
             nome = input('# Qual o seu nome? ') #escolhendo o nome do jogador
+            
+            heroi = character(nome=nome, vida=100, dano=10) #atribui o nome ao objeto heroi
 
             menu = False
             play = True
@@ -94,14 +93,16 @@ while run:
                 nome = load_list[0][:-1]
                 HP = int(load_list[1][:-1])
                 ATK = int(load_list[2][:-1])
-                pot = int(load_list[3][:-1])
-                elix = int(load_list[4][:-1])
-                gold = int(load_list[5][:-1])
-                x = int(load_list[6][:-1])
-                y = int(load_list[7][:-1])
-                key = bool(load_list[8][:-1])
+                #pot = int(load_list[3][:-1])
+                #elix = int(load_list[4][:-1])
+                #gold = int(load_list[5][:-1])
+                #x = int(load_list[6][:-1])
+                #y = int(load_list[7][:-1])
+                #key = bool(load_list[8][:-1])
                 limpar()
                 
+                heroi = character(nome=nome, vida= HP, dano=ATK)
+
                 desenho()
                 print("Bem vindo de volta", nome)
                 desenho()
@@ -132,16 +133,56 @@ while run:
         elif choice == "4":
             quit()
         ################################
-      
+########################################      
         while play:
             
             limpar()
             salvar() #autosave
             
-            print(nome)
-            
+            desenho()
+            print("Nome:",heroi.nome)
+            desenho()
+            print(f"Dano: {heroi.dano} \nVida: {heroi.vida}")
+            desenho()
+
+            #entrando em batalha
+            print('Enquanto andava pela floresta você encontra um:',goblin.nome)
+
             dest = input("# ")
-            if dest == '0':
+            
+            if dest == '0': #sair do jogo
                 play = False
                 menu = True
                 salvar()
+            
+            if dest =='1': #debug pra entrar em combate
+                
+                play = False
+                battle = True
+                
+                resultado = batalha(heroi.nome, heroi.vida, heroi.dano)
+                
+                if resultado == 0: 
+                    
+                    limpar()
+                    print('Parabéns, você venceu :)')
+                    input('# ')
+                    battle = False
+                    play = True
+
+                elif resultado == 1:
+                    
+                    limpar()
+                    print('Você morreu :(')
+                    input('# ')
+                    battle = False
+                    play = False
+                    menu = True
+
+                elif resultado ==2:
+                    
+                    limpar()
+                    input('# ')
+                    print('Hoje a covardia venceu, você viverá para mais um dia :)')
+                    battle = False
+                    play = True
