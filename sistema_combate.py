@@ -1,26 +1,29 @@
-from personagens import goblin
+from personagens import *
 from classes import character
 from misc import *
 import random
 
 
-
+def escolher_inimigo():
+    lista_de_inimigos = [goblin,Hobgoblin,esqueleto,lobo_selvagem,slime]
+    inimigo_escolhido = random.choice(lista_de_inimigos)
+    return inimigo_escolhido
 
 def batalha(nome, vida, dano):
-    
+    inimigo = escolher_inimigo()
+
     limpar()
-    
     heroi = character(nome=nome, vida=vida, dano=dano)
 
-    print(nome, 'VS', goblin.nome)
-    print('Goblin lhe encara')
+    print(nome, 'VS', inimigo.nome)
+    print(f'{inimigo.nome} lhe encara')
     while True:
         
         desenho()
         
         print(f'{heroi.nome}:\nVida:{heroi.vida}\nAtaque:{heroi.dano}')
 
-        print(f'Goblin:\nVida:{goblin.vida}\nAtaque:{goblin.dano}')
+        print(f'{inimigo.nome}:\nVida:{inimigo.vida}\nAtaque:{inimigo.dano}')
         
         desenho()
 
@@ -34,13 +37,13 @@ def batalha(nome, vida, dano):
             
             limpar()
             desenho()
-            heroi.atacar(goblin)
-            print(heroi.nome, "Acertou", goblin.nome, "Com a sua espada, causando", heroi.dano, "de dano")
-            goblin.atacar(heroi)
-            print(goblin.nome, "Acertou", heroi.nome, "Com o seu tacape, causando", goblin.dano, "de dano")
+            heroi.atacar(inimigo)
+            print(heroi.nome, "Acertou", inimigo.nome, "Com a sua espada, causando", heroi.dano, "de dano")
+            inimigo.atacar(heroi)
+            print(inimigo.nome, "Acertou", heroi.nome, "Com o seu tacape, causando", inimigo.dano + inimigo.weapon.dano, "de dano")
             desenho()
             input('# ')
-            
+
         elif choice == '2':
             c = random.choice('0', '1')
             if c == '0':
@@ -54,8 +57,8 @@ def batalha(nome, vida, dano):
 
         if heroi.vida <= 0:
             return 1
-        if goblin.vida <= 0:
+        if inimigo.vida <= 0:
             return 0
         
         limpar()
-        print(nome, 'VS', goblin.nome)
+        print(nome, 'VS', inimigo.nome)

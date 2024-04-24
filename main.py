@@ -1,8 +1,7 @@
-import os,time
+import time
 from misc import *
 from classes import character
 from sistema_combate import batalha
-from personagens import goblin
 
 run = True
 menu = True
@@ -16,8 +15,8 @@ battle = False
 def salvar():
     status = [
         str(heroi.nome),
-        str(heroi.dano),
         str(heroi.vida),
+        str(heroi.dano),
         #str(elix),
         #str(gold),
         #str(x),
@@ -146,7 +145,7 @@ while run:
             desenho()
 
             #entrando em batalha
-            print('Enquanto andava pela floresta você encontra um:',goblin.nome)
+            print('Enquanto andava pela floresta você encontra um inimigo')
 
             dest = input("# ")
             
