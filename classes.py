@@ -26,7 +26,7 @@ class herói(character):
     def equipar(self, weapon) -> None:
         self.weapon = weapon
         #print("Você equipou", self.weapon.nome)
-        input('# ')
+        #input('# ')
 
     def dropar(self) -> None:
         print("Você desequipou", self.weapon)

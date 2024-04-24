@@ -4,12 +4,14 @@ from classes import *
 from arma import *
 from sistema_combate import batalha
 
+#global menu, rules, run 
 run = True
 menu = True
 play = False
 rules = False
 key = False
 battle = False
+game = True
 
 #mapa = 
 
@@ -32,7 +34,10 @@ def salvar():
     
     file.close()
 
-while run:
+def painel_menu():
+    menu = True
+    rules = False
+
     while menu:
         #menu()
         limpar()
@@ -71,7 +76,7 @@ while run:
             heroi = herói(nome=nome, vida=100, dano=10) #atribui o nome ao objeto heroi
 
             menu = False
-            play = True
+            return True, heroi
         
         elif choice == "2":
             
@@ -96,7 +101,7 @@ while run:
                 input('> Pressione Enter para continuar ')
                 
                 menu = False
-                play = True
+                return True, heroi
 
             except OSError:
                 limpar()
@@ -119,15 +124,28 @@ while run:
         
         elif choice == "4":
             quit()
-  
-        while play:
-            
+
+while game:
+    
+    #função do menu principal
+    result = painel_menu()
+    #print (result[0])  
+    
+    #recolhendo dados da função do menu principal
+    
+    play = result[0]
+    heroi = result[1]
+
+    while play:
+        
+        #interface e gameplay base do jogo    
             limpar()
             salvar() #autosave
-            limpar()
+
             desenho()
             print("Nome:",heroi.nome)
             desenho()
+            
             print(f"Dano: {heroi.dano} + {heroi.weapon.dano}", end=' ')
             print(f"Arma equipada: {heroi.weapon.nome}" )
             print(f"Vida: {heroi.vida}")
@@ -137,8 +155,9 @@ while run:
             print('Enquanto andava pela floresta você encontra um inimigo')
 
             dest = input("# ")
-            
+
             if dest == '0': #sair do jogo
+                
                 play = False
                 menu = True
                 salvar()

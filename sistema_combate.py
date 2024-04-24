@@ -12,9 +12,10 @@ def batalha(nome, vida, dano, arma):
     inimigo = escolher_inimigo()
     #arma_atual = weapon
 
-    limpar()
+    #limpar()
     heroi = herói(nome=nome, vida=vida, dano=dano,)
-    
+    print(heroi.nome)
+
     heroi.equipar(arma)
     
     print(nome, 'VS', inimigo.nome)
@@ -39,31 +40,38 @@ def batalha(nome, vida, dano, arma):
             
             limpar()
             desenho()
+            
             heroi.atacar(inimigo)
             print(heroi.nome, "Acertou", inimigo.nome, "Com a sua espada, causando", heroi.dano, "de dano")
+            
             inimigo.atacar(heroi)
             print(inimigo.nome, "Acertou", heroi.nome, "Com o seu tacape, causando", inimigo.dano + inimigo.weapon.dano, "de dano")
+            
             desenho()
             input('# ')
 
         elif choice == '2':
-            c = random.choice('0', '1')
-            if c == '0':
+            
+            escolhas = [0,1]
+            c = random.choice(escolhas)
+
+            if c == 0:
                 limpar()
                 print('Você conseguiu fugir, ufa')
                 return 2
-            elif c == '1':
+            elif c == 1:
                 limpar()
                 print('Você não conseguiu fugir, o inimigo atacou novamente')
                 goblin.atacar(heroi)
 
         if heroi.vida <= 0: #se o heroi morrer
-            if dropcalc(inimigo.weapon.dropc) == 0:
-                return 1
+            return 1
+        
         if inimigo.vida <= 0: #se o inimigo morrer
             result = dropcalc(inimigo.drop.dropc)
             if result == 0:
                 return 0, inimigo.drop.nome
-            else: return 0
+            else: 
+                return 0
         limpar()
         print(nome, 'VS', inimigo.nome)
