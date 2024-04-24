@@ -4,9 +4,19 @@ from misc import *
 import random
 
 def escolher_inimigo():
-    lista_de_inimigos = [goblin,Hobgoblin,esqueleto,lobo_selvagem,slime]
-    inimigo_escolhido = random.choice(lista_de_inimigos)
-    return inimigo_escolhido
+    #lista_de_inimigos = [goblin,Hobgoblin,esqueleto,lobo_selvagem,slime]
+    #inimigo_escolhido = random.choice(lista_de_inimigos)
+    
+    inimigo_escolhido = goblin
+    
+    chosen = inimigo(
+        nome=inimigo_escolhido.nome, 
+        vida=inimigo_escolhido.vida, 
+        dano=inimigo_escolhido.dano,
+        weapon=inimigo_escolhido.weapon,
+        drop=inimigo_escolhido.drop)
+
+    return chosen
 
 def batalha(nome, vida, dano, arma):
     inimigo = escolher_inimigo()
@@ -24,7 +34,7 @@ def batalha(nome, vida, dano, arma):
         
         desenho()
 
-        print(f'{heroi.nome}:\nVida:{heroi.vida}\nAtaque:{heroi.dano}')
+        print(f'{heroi.nome}:\nVida:{heroi.vida}\nAtaque:{heroi.dano}\n')
 
         print(f'{inimigo.nome}:\nVida:{inimigo.vida}\nAtaque:{inimigo.dano}')
         
@@ -42,10 +52,10 @@ def batalha(nome, vida, dano, arma):
             desenho()
             
             heroi.atacar(inimigo)
-            print(heroi.nome, "Acertou", inimigo.nome, "Com a sua espada, causando", heroi.dano, "de dano")
+            print(heroi.nome, "Acertou", inimigo.nome, "Usando", heroi.weapon.nome, "causando", heroi.dano, "de dano")
             
             inimigo.atacar(heroi)
-            print(inimigo.nome, "Acertou", heroi.nome, "Com o seu tacape, causando", inimigo.dano + inimigo.weapon.dano, "de dano")
+            print(inimigo.nome, "Acertou", heroi.nome, "usando", inimigo.weapon.nome, "causando", inimigo.dano + inimigo.weapon.dano, "de dano")
             
             desenho()
             input('# ')
@@ -70,7 +80,7 @@ def batalha(nome, vida, dano, arma):
         if inimigo.vida <= 0: #se o inimigo morrer
             result = dropcalc(inimigo.drop.dropc)
             if result == 0:
-                return 0, inimigo.drop.nome
+                return 0, inimigo.drop
             else: 
                 return 0
         limpar()

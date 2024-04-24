@@ -125,6 +125,42 @@ def painel_menu():
         elif choice == "4":
             quit()
 
+def combate_resultado():
+        
+    resultado = batalha(heroi.nome, heroi.vida, heroi.dano, heroi.weapon)
+    print(resultado)
+            #print(resultado)
+    if resultado == 0: 
+                    limpar()
+                    print('Parabéns, você venceu :)')
+                    input('# ')
+                    
+                    return False
+
+    elif resultado == 1:
+                    
+                    limpar()
+                    print('Você morreu :(')
+                    input('# ')
+                    
+                    return False
+    elif resultado ==2:
+                    
+                    limpar()
+                    input('# ')
+                    print('Hoje a covardia venceu, você viverá para mais um dia :)')
+                    
+                    return False
+    elif 0 == resultado[0]: 
+                    
+                    limpar()
+                    print('Parabéns, você venceu :)')
+
+                    input('# ')
+                    
+                    return True, resultado[1]
+
+
 while game:
     
     #função do menu principal
@@ -139,6 +175,7 @@ while game:
     while play:
         
         #interface e gameplay base do jogo    
+            
             limpar()
             salvar() #autosave
 
@@ -164,33 +201,15 @@ while game:
             
             if dest =='1': #debug pra entrar em combate
                 
-                play = False
+                limpar()
+
                 battle = True
-                
-                resultado = batalha(heroi.nome, heroi.vida, heroi.dano, heroi.weapon)
-                #print(resultado)
-                if resultado == 0 or 0 in resultado: 
-                    limpar()
-                    print('Parabéns, você venceu :)')
-                    if resultado == list:
-                        heroi.equipar(resultado[1])
-                    input('# ')
-                    battle = False
-                    play = True
+                resultado = combate_resultado()
 
-                elif resultado == 1:
-                    
-                    limpar()
-                    print('Você morreu :(')
-                    input('# ')
-                    battle = False
-                    play = False
-                    menu = True
+                if resultado != False:
+                    #Caso algo tenha sido dropado, equipar
+                    heroi.equipar(resultado[1])
 
-                elif resultado ==2:
-                    
-                    limpar()
-                    input('# ')
-                    print('Hoje a covardia venceu, você viverá para mais um dia :)')
-                    battle = False
-                    play = True
+                else:
+                    print("A função não retornou nada.")
+                    input("# ")

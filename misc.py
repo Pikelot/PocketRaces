@@ -9,9 +9,9 @@ def desenho():
 
 def dropcalc(drop_chance):
     chance = 100 * drop_chance
-    print(chance)
+
     rolagem = random.randint(0,100)
-    print(rolagem)
+    
     if rolagem <= chance:
         print("Um inimigo dropou um item")
         input("#")

@@ -13,7 +13,7 @@ class character:
 
     def atacar(self, target) -> None:
         dano_causado = self.dano+self.weapon.dano
-        print(self.weapon.nome)
+        #print(self.weapon.nome)
         target.vida -= dano_causado
         target.vida = max(target.vida, 0)
 
