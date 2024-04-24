@@ -1,6 +1,7 @@
 import time
 from misc import *
-from classes import character
+from classes import *
+from arma import *
 from sistema_combate import batalha
 
 run = True
@@ -33,7 +34,7 @@ def salvar():
 
 while run:
     while menu:
-        
+        #menu()
         limpar()
         
         desenho()
@@ -65,16 +66,9 @@ while run:
             
             limpar()
 
-            #elix = 0
-            #gold = 0
-            #pot = 0
-            #x = 0
-            #y = 0
-            #key = 0
-
             nome = input('# Qual o seu nome? ') #escolhendo o nome do jogador
             
-            heroi = character(nome=nome, vida=100, dano=10) #atribui o nome ao objeto heroi
+            heroi = herói(nome=nome, vida=100, dano=10) #atribui o nome ao objeto heroi
 
             menu = False
             play = True
@@ -92,15 +86,9 @@ while run:
                 nome = load_list[0][:-1]
                 HP = int(load_list[1][:-1])
                 ATK = int(load_list[2][:-1])
-                #pot = int(load_list[3][:-1])
-                #elix = int(load_list[4][:-1])
-                #gold = int(load_list[5][:-1])
-                #x = int(load_list[6][:-1])
-                #y = int(load_list[7][:-1])
-                #key = bool(load_list[8][:-1])
                 limpar()
                 
-                heroi = character(nome=nome, vida= HP, dano=ATK)
+                heroi = herói(nome=nome, vida= HP, dano=ATK)
 
                 desenho()
                 print("Bem vindo de volta", nome)
@@ -131,17 +119,18 @@ while run:
         
         elif choice == "4":
             quit()
-        ################################
-########################################      
+  
         while play:
             
             limpar()
             salvar() #autosave
-            
+            limpar()
             desenho()
             print("Nome:",heroi.nome)
             desenho()
-            print(f"Dano: {heroi.dano} \nVida: {heroi.vida}")
+            print(f"Dano: {heroi.dano} + {heroi.weapon.dano}", end=' ')
+            print(f"Arma equipada: {heroi.weapon.nome}" )
+            print(f"Vida: {heroi.vida}")
             desenho()
 
             #entrando em batalha
@@ -159,12 +148,13 @@ while run:
                 play = False
                 battle = True
                 
-                resultado = batalha(heroi.nome, heroi.vida, heroi.dano)
-                
-                if resultado == 0: 
-                    
+                resultado = batalha(heroi.nome, heroi.vida, heroi.dano, heroi.weapon)
+                #print(resultado)
+                if resultado == 0 or 0 in resultado: 
                     limpar()
                     print('Parabéns, você venceu :)')
+                    if resultado == list:
+                        heroi.equipar(resultado[1])
                     input('# ')
                     battle = False
                     play = True

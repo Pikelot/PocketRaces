@@ -1,28 +1,38 @@
 from classes import *
-#from Items import *
+from arma import *
 
-goblin = character(
+goblin = inimigo(
     nome="Goblin", 
     vida= 80,
     dano=5,
+    weapon=mãos,
+    drop=espada_de_madeira
     )
 
-slime = character(
+slime = inimigo(
     nome="Slime",
     vida=50,
-    dano=10)
+    dano=10,
+    weapon=mãos,
+    drop=palito_de_fosforo)
 
-lobo_selvagem = character(
+lobo_selvagem = inimigo(
     nome="Lobo Selvagem",
     vida=50,
-    dano=10)
+    dano=10,
+    weapon=mãos,
+    drop=espada_de_madeira)
 
-esqueleto = character(
+esqueleto = inimigo(
     nome="Esqueleto",
     vida=70,
-    dano=10)
+    dano=10,
+    weapon=espada_de_madeira,
+    drop=espada_de_madeira)
 
-Hobgoblin = character(
+Hobgoblin = inimigo(
     nome="Hobgoblin",
     vida=100,
-    dano=8)
+    dano=8,
+    weapon=tronco_de_madeira,
+    drop=tronco_de_madeira)

@@ -1,26 +1,28 @@
 from personagens import *
-from classes import character
+from classes import *
 from misc import *
 import random
-
 
 def escolher_inimigo():
     lista_de_inimigos = [goblin,Hobgoblin,esqueleto,lobo_selvagem,slime]
     inimigo_escolhido = random.choice(lista_de_inimigos)
     return inimigo_escolhido
 
-def batalha(nome, vida, dano):
+def batalha(nome, vida, dano, arma):
     inimigo = escolher_inimigo()
+    #arma_atual = weapon
 
     limpar()
-    heroi = character(nome=nome, vida=vida, dano=dano)
-
+    heroi = herói(nome=nome, vida=vida, dano=dano,)
+    
+    heroi.equipar(arma)
+    
     print(nome, 'VS', inimigo.nome)
     print(f'{inimigo.nome} lhe encara')
     while True:
         
         desenho()
-        
+
         print(f'{heroi.nome}:\nVida:{heroi.vida}\nAtaque:{heroi.dano}')
 
         print(f'{inimigo.nome}:\nVida:{inimigo.vida}\nAtaque:{inimigo.dano}')
@@ -55,10 +57,13 @@ def batalha(nome, vida, dano):
                 print('Você não conseguiu fugir, o inimigo atacou novamente')
                 goblin.atacar(heroi)
 
-        if heroi.vida <= 0:
-            return 1
-        if inimigo.vida <= 0:
-            return 0
-        
+        if heroi.vida <= 0: #se o heroi morrer
+            if dropcalc(inimigo.weapon.dropc) == 0:
+                return 1
+        if inimigo.vida <= 0: #se o inimigo morrer
+            result = dropcalc(inimigo.drop.dropc)
+            if result == 0:
+                return 0, inimigo.drop.nome
+            else: return 0
         limpar()
         print(nome, 'VS', inimigo.nome)
