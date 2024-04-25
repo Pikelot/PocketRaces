@@ -24,7 +24,6 @@ def batalha(nome, vida, dano, arma):
 
     #limpar()
     heroi = herói(nome=nome, vida=vida, dano=dano,)
-    print(heroi.nome)
 
     heroi.equipar(arma)
     

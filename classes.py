@@ -21,6 +21,9 @@ class herói(character):
     def __init__(self, nome: str, vida: int, dano: int,) -> None:
         super().__init__(nome=nome, vida=vida, dano=dano)
         
+        #self.posx = posx
+        #self.posy = posy
+
         self.default_weapon = self.weapon
 
     def equipar(self, weapon) -> None:
