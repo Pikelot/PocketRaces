@@ -1,7 +1,7 @@
-import time
+import time,json,random
 from misc import *
 from classes import *
-from arma import *
+from arma import weapon
 from sistema_combate import batalha
 from mapgen import print_map
 
@@ -19,22 +19,17 @@ map_height = 10
 #mapa = 
 
 def salvar(posx, posy):
-    status = [
-        str(heroi.nome),
-        str(heroi.vida),
-        str(heroi.dano),
-        str(posx),
-        str(posy)
-        #str(elix),
-        #str(gold),
-        #str(x),
-        #str(y),
-        #str(key)
-    ]
+ 
+    heroi_arq = heroi_para_dict(heroi)
+
+    with open('objeto_salvo.json', 'w') as arquivo:
+        json.dump(heroi_arq, arquivo)
+    
+    pos = [str(posx), str(posy)]
 
     file = open("load.txt", "w")
 
-    for items in status:
+    for items in pos:
         file.write(items + '\n')
     
     file.close()
@@ -94,20 +89,35 @@ def painel_menu():
             
             time.sleep(1)
             try:
-                f = open('load.txt', 'r') #carregando o load
-                load_list = f.readlines()
                 
-                nome = load_list[0][:-1]
-                HP = int(load_list[1][:-1])
-                ATK = int(load_list[2][:-1])
-                pos_x = int(load_list[3][:-1])
-                pos_y = int(load_list[4][:-1])
+                f = open('load.txt', 'r') #carregando o load
+                
+                load_list = f.readlines()
+                pos_x = int(load_list[0][:-1])
+                pos_y = int(load_list[1][:-1])
+                
                 limpar()
                 
-                heroi = herói(nome=nome, vida= HP, dano=ATK,)
+                with open('objeto_salvo.json', 'r') as arquivo:
+                      heroi_data = json.load(arquivo)
+                      print(heroi_data)
+                      #heroi = herói
+                
+                heroi = herói(nome=heroi_data['nome'], 
+                              vida=heroi_data['vida'], 
+                              dano=heroi_data['dano'],)
 
+                arma = weapon(nome=heroi_data['weapon']['nome'],
+                           tipo=heroi_data['weapon']['tipo'],
+                           dano=heroi_data['weapon']['dano'],
+                           valor=heroi_data['weapon']['valor'],
+                           dropc=heroi_data['weapon']['dropc'])
+
+                heroi.equipar(arma)
+                
+                print(heroi.weapon)
                 desenho()
-                print("Bem vindo de volta", nome)
+                print("Bem vindo de volta", heroi.nome)
                 desenho()
                 input('> Pressione Enter para continuar ')
                 
@@ -195,8 +205,6 @@ while game:
             
             while parado:
                 limpar()
-                
-                encontrou = random.randint(0,2)
 
                 desenho()
                 print("Nome:",heroi.nome)
@@ -222,13 +230,19 @@ while game:
                       pos_y += 1
                 if choice.upper() == 'D':
                       pos_x += 1      
+                
+                if choice == '0':
+                      salvar(pos_x, pos_y)
+                      parado = False
+                      play = False
+                      game = True
 
-                if encontrou == 0:
-                    parado = False
-                    battle = True
+                if parado == True:
+                    encontrou = random.randint(0,2)
 
-                      
-                print('Enquanto andava pela dungeon você encontra um inimigo')
+                    if encontrou == 0:
+                        parado = False
+                        battle = True
 
             #if dest == '0': #sair do jogo
             #    
