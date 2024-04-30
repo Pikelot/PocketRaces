@@ -2,7 +2,7 @@ import time,json,random
 from misc import *
 from classes import *
 from arma import weapon
-from sistema_combate import batalha
+from sistema_combate import batalha, escolher_inimigo
 from mapgen import print_map,geração_en
 
 #global menu, rules, run 
@@ -146,6 +146,7 @@ def painel_menu():
 def combate_resultado():
         
     resultado = batalha(heroi.nome, heroi.vida, heroi.dano, heroi.weapon)
+    
     print(resultado)
             #print(resultado)
     if resultado == 0: 
@@ -153,22 +154,21 @@ def combate_resultado():
                     print('Parabéns, você venceu :)')
                     input('# ')
                     
-                    return False
+                    return True, 'a'
 
     elif resultado == 1:
                     
                     limpar()
-                    print('Você morreu :(')
-                    input('# ')
+                    print('Você morreu')
                     
-                    return False
+                    return False, 'd'
+    
     elif resultado ==2:
                     
                     limpar()
-                    input('# ')
-                    print('Hoje a covardia venceu, você viverá para mais um dia :)')
                     
-                    return False
+                    return True, 'a'
+    
     elif 0 == resultado[0]: 
                     
                     limpar()
@@ -202,7 +202,7 @@ while run:
             salvar(pos_x, pos_y) #autosave
 
             #entrando em batalha
-            vezes_gerar = 1
+            Gerar_Inimigo = True
 
             parado = True
             play = False
@@ -210,9 +210,9 @@ while run:
     while parado:
         limpar()
         
-        if vezes_gerar == 1:
+        if Gerar_Inimigo == True:
             lista = geração_en()
-            vezes_gerar = 0
+            Gerar_Inimigo = False
         
         desenho()
         print("Nome:",heroi.nome)
@@ -230,16 +230,39 @@ while run:
         desenho()
         choice = input("# ")
 
-        if choice.upper() == 'W':
+        if choice.upper() == 'W': #movimento cima
                 pos_y -= 1
-        if choice.upper() == 'A':
+        if choice.upper() == 'A': #movimento esquerda
                 pos_x -= 1
-        if choice.upper() == 'S':
+        if choice.upper() == 'S': #movimento baixo
                 pos_y += 1
-        if choice.upper() == 'D':
+        if choice.upper() == 'D': #movimento direita
                 pos_x += 1      
 
-        if any(item[0] == pos_x and item[1] == pos_y for item in lista):
+
+
+        #Verificando se jogador está no mesmo piso que um inimigo
+
+        if any(item[0] == pos_x and item[1] == pos_y for item in lista):               
+                limpar()
+
+                inimigo_escolhido = escolher_inimigo()
+                
+                #desenho()
+                print(f"""
+x--------------------------------x
+|Você encontrou {inimigo_escolhido.nome:<17}|
+x--------------------------------x
+|{'Seus status são:':<32}|
+|Dano: {inimigo_escolhido.dano:<26}|
+|Vida: {inimigo_escolhido.vida:<26}|
+|Arma: {inimigo_escolhido.weapon.nome:<26}|
+x--------------------------------x
+|       Você lutará? S/N         |
+x--------------------------------x
+""")
+                
+                choice = input('# ')
                 parado = False
                 battle = True
 
@@ -250,49 +273,49 @@ while run:
                 play = False
                 game = True
 
-        #if parado == True:
-        #    encontrou = random.randint(0,2)
-        #
-        #    if encontrou == 0:
-        #        parado = False
-        #        battle = True
-
-    #if dest == '0': #sair do jogo
-    #    
-    #    play = False
-    #    menu = True
-    #    salvar(pos_x, pos_y)
-
     while battle:    
         limpar()
 
-        print('Enquanto andava pela dungeon você encontra um inimigo')
-        input("# ")
+        #print('Enquanto andava pela dungeon você encontra um inimigo')
+        #input("# ")
 
         limpar()
 
         resultado = combate_resultado()
         
-        if resultado != False:
+        if resultado[0] == True:
+            
             #Caso algo tenha sido dropado, equipar
             
             print("Ufa, sobreviveu a essa!")
-            desenho()
-            print("Você encontrou: ", end="")
-            print(f"X-| {resultado[1].nome} |-X")
-            desenho()
-
-            print("Você deseja equipar? S/N?\n")
-            choice = input("# ")
             
-            if choice.upper() == "S":
-                heroi.equipar(resultado[1])
+            if resultado[1] != 'a':
+                desenho()
+                print("Você encontrou: ", end="")
+                print(f"X-| {resultado[1].nome} |-X")
+                desenho()
+
+                print("Você deseja equipar? S/N?\n")
+                choice = input("# ")
+                
+                if choice.upper() == "S":
+                    heroi.equipar(resultado[1])
+            
+            #print(lista)
+            
+            inimigo_morto = [pos_x, pos_y] #Removendo o inimigo derrotado do mapa
+            lista.remove(inimigo_morto)#
+            input('#')
 
             parado = True
             battle = False
 
         else:
-            print("Ufa, sobreviveu a essa!")
-            parado = True
+             #Jogador perder
+            
+            os.remove('load.txt')
+
+            game = True
+
+            parado = False
             battle = False
-            input("# ")

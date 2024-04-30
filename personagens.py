@@ -3,7 +3,7 @@ from arma import *
 
 goblin = inimigo(
     nome="Goblin", 
-    vida= 80,
+    vida= 20,
     dano=5,
     weapon=mãos,
     drop=espada_de_madeira
